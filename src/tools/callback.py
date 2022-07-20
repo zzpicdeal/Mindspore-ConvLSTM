@@ -38,10 +38,10 @@ class EvaluateCallBack(Callback):
         cb_params = run_context.original_args()
         cur_epoch_num = cb_params.cur_epoch_num
         result = self.model.eval(self.eval_dataset)
-        if result['MSE'] > self.best_acc:
+        if result['MSE'] < self.best_acc:
             self.best_acc = result["MSE"]
-        print("epoch: %s MSE: %s, best MSE is %s" %
-              (cb_params.cur_epoch_num, result["MSE"], self.best_acc), flush=True)
+        print("epoch: %s MSE: %s, best MSE is %s , MAE is %s,SSIM is %s" %
+              (cb_params.cur_epoch_num, result["MSE"], self.best_acc,result["MAE"],result["SSIM"]), flush=True)
         '''   
         if True:
             import moxing as mox
