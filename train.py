@@ -27,7 +27,7 @@ from mindspore import context
 from mindspore import nn
 from mindspore.common import set_seed
 from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMonitor, TimeMonitor
-
+from mindspore.context import ParallelMode
 #from src.args import args
 from src.tools.callback import EvaluateCallBack
 
@@ -58,7 +58,7 @@ parser.add_argument('--train_url',
                     help='model folder to save/load',
                     default= workroot + '/model/')
 
-parser.add_argument("--batch_size", default=32, type=int, metavar="N",
+parser.add_argument("--batch_size", default=8, type=int, metavar="N",
                     help="mini-batch size (default: 256), this is the total "
                             "batch size of all GPUs on the current node when "
                             "using Data Parallel or Distributed Data Parallel")
@@ -124,6 +124,7 @@ def main():
         0: context.GRAPH_MODE,
         1: context.PYNATIVE_MODE
     }
+    context.set_auto_parallel_context(parallel_mode=ParallelMode.AUTO_PARALLEL, gradients_mean=True)
     context.set_context(mode=mode[1], device_target=args.device_target)
     context.set_context(enable_graph_kernel=False)
     if args.device_target == "Ascend":
@@ -184,7 +185,7 @@ def main():
     print("begin train")
     model.train(int(args.epochs), data.train_dataset,
                 callbacks=[time_cb, ckpoint_cb, loss_cb, eval_cb],
-                dataset_sink_mode=True)
+                dataset_sink_mode=False)
     print("train success")
 
     
