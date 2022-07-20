@@ -38,7 +38,7 @@ from src.configs import parser as _parser
 from mindspore.communication.management import init
 
 import moxing as mox
-from dataset import get_dataset
+from dataset import get_dataset, _get_rank_info
 from model import ConvLSTM
 
 environment = 'train'  
@@ -127,8 +127,13 @@ def main():
         0: context.GRAPH_MODE,
         1: context.PYNATIVE_MODE
     }
-    context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL, gradients_mean=True)
-    context.set_context(mode=mode[1], device_target=args.device_target)
+    device_num, rank_id = _get_rank_info()
+
+    if device_num == 1 :
+        context.set_context(mode=mode[1], device_target=args.device_target)
+    else:
+        context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL)
+        context.set_context(mode=mode[1], device_target=args.device_target)
     context.set_context(enable_graph_kernel=False)
     if args.device_target == "Ascend":
         context.set_context(enable_auto_mixed_precision=True)
