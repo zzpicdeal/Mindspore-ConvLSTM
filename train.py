@@ -31,7 +31,7 @@ from mindspore.context import ParallelMode
 #from src.args import args
 from src.tools.callback import EvaluateCallBack
 
-from src.tools.criterion import get_criterion, NetWithLoss
+#from src.tools.criterion import get_criterion, NetWithLoss
 from src.tools.get_misc import  set_device, pretrained, get_train_one_step
 from src.tools.optimizer import get_optimizer
 from src.configs import parser as _parser
@@ -127,7 +127,7 @@ def main():
         0: context.GRAPH_MODE,
         1: context.PYNATIVE_MODE
     }
-    context.set_auto_parallel_context(parallel_mode=ParallelMode.AUTO_PARALLEL, gradients_mean=True)
+    context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL, gradients_mean=True)
     context.set_context(mode=mode[1], device_target=args.device_target)
     context.set_context(enable_graph_kernel=False)
     if args.device_target == "Ascend":
@@ -146,7 +146,7 @@ def main():
                  return_all_layers=False)#
     #cast_amp(net)
     criterion = nn.MSELoss()#
-    net_with_loss = NetWithLoss(net, criterion)
+    #net_with_loss = NetWithLoss(net, criterion)
     data = get_dataset(data_dir,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
     min_lr = 0.00001
@@ -162,13 +162,11 @@ def main():
 
     # save a yaml file to read to record parameters
 
-    net_with_loss = get_train_one_step( net_with_loss, optimizer)
+    #net_with_loss = get_train_one_step( net_with_loss, optimizer)
 
     eval_network = nn.WithEvalCell(net, criterion)
     eval_indexes = [0, 1, 2]
-    model = Model(net_with_loss, metrics={'SSIM': nn.MAE(), "MSE":nn.MSE(),"MAE":nn.MAE()},
-                  eval_network=eval_network,
-                  eval_indexes=eval_indexes)
+    model = Model(network=net, loss_fn=criterion, optimizer=optimizer, metrics={'SSIM': nn.MAE(), "MSE":nn.MSE(),"MAE":nn.MAE()})
 
     config_ck = CheckpointConfig(save_checkpoint_steps=data.train_dataset.get_dataset_size(),
                                  keep_checkpoint_max=args.save_every)
