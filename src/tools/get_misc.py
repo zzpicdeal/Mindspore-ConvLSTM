@@ -106,16 +106,16 @@ def pretrained(args, model):
         print("=> no pretrained weights found at '{}'".format(args.pretrained))
 
 
-def get_train_one_step(args, net_with_loss, optimizer):
+def get_train_one_step( net_with_loss, optimizer):
     """get_train_one_step cell"""
-    if args.is_dynamic_loss_scale:
+    if False:
         print(f"=> Using DynamicLossScaleUpdateCell")
         scale_sense = nn.wrap.loss_scale.DynamicLossScaleUpdateCell(loss_scale_value=2 ** 24, scale_factor=2,
                                                                     scale_window=2000)
     else:
-        print(f"=> Using FixedLossScaleUpdateCell, loss_scale_value:{args.loss_scale}")
-        scale_sense = nn.wrap.FixedLossScaleUpdateCell(loss_scale_value=args.loss_cale)
+        print(f"=> Using FixedLossScaleUpdateCell, loss_scale_value:{1024}")
+        scale_sense = nn.wrap.FixedLossScaleUpdateCell(loss_scale_value=1024)
     net_with_loss = TrainClipGrad(net_with_loss, optimizer, scale_sense=scale_sense,
-                                  clip_global_norm_value=args.clip_global_norm_value,
+                                  clip_global_norm_value=5.,
                                   use_global_norm=True)
     return net_with_loss
