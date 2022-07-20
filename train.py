@@ -105,7 +105,7 @@ def EnvToObs(train_dir, obs_train_url):
     return     
 
 def main():
-    init()
+    
     print(os.listdir(workroot))
     args = parser.parse_args()
     if "DEVICE_NUM" not in os.environ.keys():
@@ -132,6 +132,7 @@ def main():
     if device_num == 1 :
         context.set_context(mode=mode[1], device_target=args.device_target)
     else:
+        init()
         context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL)
         context.set_context(mode=mode[1], device_target=args.device_target)
     context.set_context(enable_graph_kernel=False)
