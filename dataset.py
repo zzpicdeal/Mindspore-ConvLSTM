@@ -1,7 +1,7 @@
 
 import gzip
 import math
-import mindspore.numpy as np
+import mindspore as np
 import os
 from PIL import Image
 import random
