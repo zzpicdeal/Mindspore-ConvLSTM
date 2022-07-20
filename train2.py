@@ -50,8 +50,7 @@ from mindspore import context
 from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMonitor
 from mindspore import Tensor, Model
 
-from model_graph import *
-from model_graph import OPS,Genotype,operations
+
 from mindspore.common import set_seed
 from mindspore import context, DatasetHelper, connect_network_with_dataset
 from mindspore import dtype as mstype
@@ -66,14 +65,24 @@ import moxing as mox
 from dataset import get_dataset, _get_rank_info
 from model import ConvLSTM
 set_seed(1996)
-
+environment = 'train'  
+if environment == 'debug':
+    workroot = '/home/ma-user/work' #调试任务使用该参数
+else:
+    workroot = '/home/work/user-job-dir' # 训练任务使用该参数
+print('current work mode:' + environment + ', workroot:' + workroot)
 parser = argparse.ArgumentParser("convlstm")
 parser.add_argument('--batch_size', type=int, default=32, help='batch size')
 
 parser.add_argument('--epochs', type=int, default=500, help='num of training epochs')
 #parser.add_argument('--seed', type=int, default=1, help='random seed')
-parser.add_argument('--data_url', required=True, default=None, help='Location of data.')
-parser.add_argument('--train_url', required=True, default=None, help='Location of training outputs.')#save_path
+parser.add_argument('--data_url',
+                    help='path to training/inference dataset folder',
+                    default= workroot + '/data/')
+
+parser.add_argument('--train_url',
+                    help='model folder to save/load',
+                    default= workroot + '/model/')#save_path
 #parser.add_argument('--test_url', required=True, default=None, help='Location of data.')
 parser.add_argument('--num_parallel_workers', type=int, default=1, help='num_parallel_work')
 parser.add_argument("--save_every", default=2, type=int, help="Save every ___ epochs(default:2)")
@@ -106,12 +115,7 @@ def EnvToObs(train_dir, obs_train_url):
     except Exception as e:
         print('moxing upload {} to {} failed: '.format(train_dir,obs_train_url) + str(e))
     return     
-environment = 'train'  
-if environment == 'debug':
-    workroot = '/home/ma-user/work' #调试任务使用该参数
-else:
-    workroot = '/home/work/user-job-dir' # 训练任务使用该参数
-print('current work mode:' + environment + ', workroot:' + workroot)
+
 
 
 def main():
@@ -164,4 +168,5 @@ def main():
     print("train success")
 
     EnvToObs(train_dir, args.train_url)
-            
+if __name__ == '__main__':
+    main()
