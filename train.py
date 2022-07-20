@@ -151,7 +151,7 @@ def main():
 
     ckpoint_cb = ModelCheckpoint(prefix='convlstm' + str(rank), directory=ckpt_save_dir,
                                  config=config_ck)
-    loss_cb = LossMonitor()
+    loss_cb = LossMonitor(100)
     eval_cb = EvaluateCallBack(model, eval_dataset=data.val_dataset, src_url=ckpt_save_dir,
                                train_url=os.path.join(args.train_url, "ckpt_" + str(rank)),
                                save_freq=args.save_every)
