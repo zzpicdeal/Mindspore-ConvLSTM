@@ -35,7 +35,7 @@ from src.tools.criterion import get_criterion, NetWithLoss
 from src.tools.get_misc import  set_device, pretrained, get_train_one_step
 from src.tools.optimizer import get_optimizer
 from src.configs import parser as _parser
-
+import moxing as mox
 from dataset import get_dataset
 from model import ConvLSTM
 
@@ -85,6 +85,22 @@ random_seed = 1996
 np.random.seed(random_seed)
 mindspore.set_seed(random_seed)
 
+ ######################## 将多个数据集从obs拷贝到训练镜像中 （固定写法）########################  
+def ObsToEnv(obs_data_url, data_dir):
+    try:     
+        mox.file.copy_parallel(obs_data_url, data_dir)
+        print("Successfully Download {} to {}".format(obs_data_url, data_dir))
+    except Exception as e:
+        print('moxing download {} to {} failed: '.format(obs_data_url, data_dir) + str(e))
+    return 
+ ######################## 将输出的模型拷贝到obs（固定写法）########################  
+def EnvToObs(train_dir, obs_train_url):
+    try:
+        mox.file.copy_parallel(train_dir, obs_train_url)
+        print("Successfully Upload {} to {}".format(train_dir,obs_train_url))
+    except Exception as e:
+        print('moxing upload {} to {} failed: '.format(train_dir,obs_train_url) + str(e))
+    return     
 
 def main():
     print(os.listdir(workroot))
@@ -92,7 +108,16 @@ def main():
     if "DEVICE_NUM" not in os.environ.keys():
         os.environ["DEVICE_NUM"] = str(args.device_num)
         os.environ["RANK_SIZE"] = str(args.device_num)   
-
+    #初始化数据和模型存放目录
+    data_dir = workroot + '/data'  #先在训练镜像中定义数据集路径
+    train_dir = workroot + '/model' #先在训练镜像中定义输出路径
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    if not os.path.exists(train_dir):
+            os.makedirs(train_dir)
+ ######################## 将数据集从obs拷贝到训练镜像中 （固定写法）########################   
+    # 在训练环境中定义data_url和train_url，并把数据从obs拷贝到相应的固定路径，以下写法是将数据拷贝到/home/work/user-job-dir/data/目录下，可修改为其他目录
+    ObsToEnv(args.data_url,data_dir)
     set_seed(args.seed)
     
     mode = {
@@ -118,7 +143,7 @@ def main():
     #cast_amp(net)
     criterion = nn.MSELoss()#
     net_with_loss = NetWithLoss(net, criterion)
-    data = get_dataset(args.data_url,args.batch_size)#
+    data = get_dataset(data_dir,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
     min_lr = 0.00001
     max_lr = 0.001
@@ -165,7 +190,7 @@ def main():
     
     #import moxing as mox
     #mox.file.copy_parallel(src_url=ckpt_save_dir, dst_url=os.path.join(args.train_url, "ckpt_" + str(rank)))
-
+    EnvToObs(train_dir, args.train_url)
 
 if __name__ == '__main__':
     main()
