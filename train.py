@@ -35,6 +35,8 @@ from src.tools.criterion import get_criterion, NetWithLoss
 from src.tools.get_misc import  set_device, pretrained, get_train_one_step
 from src.tools.optimizer import get_optimizer
 from src.configs import parser as _parser
+from mindspore.communication.management import init
+
 import moxing as mox
 from dataset import get_dataset
 from model import ConvLSTM
@@ -103,6 +105,7 @@ def EnvToObs(train_dir, obs_train_url):
     return     
 
 def main():
+    init()
     print(os.listdir(workroot))
     args = parser.parse_args()
     if "DEVICE_NUM" not in os.environ.keys():
