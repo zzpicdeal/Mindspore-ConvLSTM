@@ -30,7 +30,7 @@ from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMoni
 
 #from src.args import args
 from src.tools.callback import EvaluateCallBack
-from src.tools.cell import cast_amp
+
 from src.tools.criterion import get_criterion, NetWithLoss
 from src.tools.get_misc import  set_device, pretrained, get_train_one_step
 from src.tools.optimizer import get_optimizer
@@ -58,7 +58,7 @@ parser.add_argument('--train_url',
                     help='model folder to save/load',
                     default= workroot + '/model/')
 
-parser.add_argument("--batch-size", default=32, type=int, metavar="N",
+parser.add_argument("--batch_size", default=32, type=int, metavar="N",
                     help="mini-batch size (default: 256), this is the total "
                             "batch size of all GPUs on the current node when "
                             "using Data Parallel or Distributed Data Parallel")
@@ -118,7 +118,7 @@ def main():
     #cast_amp(net)
     criterion = nn.MSELoss()#
     net_with_loss = NetWithLoss(net, criterion)
-    data = get_dataset(args.data_url,args.batch_szie)#
+    data = get_dataset(args.data_url,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
     min_lr = 0.00001
     max_lr = 0.001
@@ -133,7 +133,7 @@ def main():
 
     # save a yaml file to read to record parameters
 
-    net_with_loss = get_train_one_step(args, net_with_loss, optimizer)
+    net_with_loss = get_train_one_step( net_with_loss, optimizer)
 
     eval_network = nn.WithEvalCell(net, criterion)
     eval_indexes = [0, 1, 2]
@@ -149,7 +149,7 @@ def main():
     if True:
         ckpt_save_dir = workroot + '/model/ckpt_' + str(rank)
 
-    ckpoint_cb = ModelCheckpoint(prefix=args.arch + str(rank), directory=ckpt_save_dir,
+    ckpoint_cb = ModelCheckpoint(prefix='convlstm' + str(rank), directory=ckpt_save_dir,
                                  config=config_ck)
     loss_cb = LossMonitor()
     eval_cb = EvaluateCallBack(model, eval_dataset=data.val_dataset, src_url=ckpt_save_dir,
@@ -157,7 +157,7 @@ def main():
                                save_freq=args.save_every)
 
     print("begin train")
-    model.train(int(args.epochs - args.start_epoch), data.train_dataset,
+    model.train(int(args.epochs), data.train_dataset,
                 callbacks=[time_cb, ckpoint_cb, loss_cb, eval_cb],
                 dataset_sink_mode=True)
     print("train success")
