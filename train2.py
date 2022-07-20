@@ -142,8 +142,8 @@ def main():
     #net_with_loss = NetWithLoss(net, criterion)
     data = get_dataset(data_dir,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
-    min_lr = 0.00001
-    max_lr = 0.001
+    min_lr = 0.000001
+    max_lr = 0.0001
     decay_steps = 1000
     cosine_decay_lr = nn.CosineDecayLR(min_lr, max_lr, decay_steps)
     optimizer = nn.Adam(
