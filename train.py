@@ -132,11 +132,9 @@ def main():
     if device_num == 1 :
         context.set_context(mode=mode[1], device_target=args.device_target)
     else:
-        init()
-        context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL)
         context.set_context(mode=mode[1], device_target=args.device_target)
         
-    #context.set_context(enable_graph_kernel=False)
+    context.set_context(enable_graph_kernel=False)
     if args.device_target == "Ascend":
         context.set_context(enable_auto_mixed_precision=False)
     rank = set_device(args)
