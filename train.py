@@ -36,7 +36,8 @@ from src.tools.get_misc import  set_device, pretrained, get_train_one_step
 from src.tools.optimizer import get_optimizer
 from src.configs import parser as _parser
 from mindspore.communication.management import init
-
+from mindspore.parallel._utils import (_get_device_num, _get_gradients_mean,
+                                       _get_parallel_mode, _get_enable_parallel_optimizer)
 import moxing as mox
 from dataset import get_dataset, _get_rank_info
 from model import ConvLSTM
@@ -134,9 +135,10 @@ def main():
     else:
         context.set_context(mode=mode[1], device_target=args.device_target)
         
-    context.set_context(enable_graph_kernel=False)
+    #context.set_context(enable_graph_kernel=False)
     if args.device_target == "Ascend":
-        context.set_context(enable_auto_mixed_precision=False)
+        pass
+        #context.set_context(enable_auto_mixed_precision=True)
     rank = set_device(args)
 
     # get model and cast amp_level
@@ -187,7 +189,7 @@ def main():
     eval_cb = EvaluateCallBack(model, eval_dataset=data.val_dataset, src_url=ckpt_save_dir,
                                train_url=os.path.join(args.train_url, "ckpt_" + str(rank)),
                                save_freq=args.save_every)
-
+    print(_get_device_num())
     print("begin train")
     model.train(int(args.epochs), data.train_dataset,
                 callbacks=[time_cb, ckpoint_cb, loss_cb, eval_cb],
