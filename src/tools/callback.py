@@ -42,7 +42,9 @@ class EvaluateCallBack(Callback):
             self.best_acc = result["MSE"]
         print("epoch: %s MSE: %s, best MSE is %s" %
               (cb_params.cur_epoch_num, result["MSE"], self.best_acc), flush=True)
+        '''   
         if True:
             import moxing as mox
             if cur_epoch_num % self.save_freq == 0:
                 mox.file.copy_parallel(src_url=self.src_url, dst_url=self.train_url)
+        '''   
