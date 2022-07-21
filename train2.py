@@ -87,6 +87,12 @@ parser.add_argument('--train_url',
 parser.add_argument('--num_parallel_workers', type=int, default=1, help='num_parallel_work')
 parser.add_argument("--save_every", default=2, type=int, help="Save every ___ epochs(default:2)")
 #parser.add_argument('--continue', type=bool, default=False, help='continue train')
+parser.add_argument(
+    '--device_target',
+    type=str,
+    default="Ascend",
+    choices=['Ascend', 'CPU'],
+    help='device where the code will be implemented (default: CPU),若要在启智平台上使用NPU，需要在启智平台训练界面上加上运行参数device_target=Ascend')
 args = parser.parse_args()
 #context.set_context(mode=context.PYNATIVE_MODE, device_target="Ascend")
 #context.set_context(mode=context.GRAPH_MODE, device_target="Ascend")
