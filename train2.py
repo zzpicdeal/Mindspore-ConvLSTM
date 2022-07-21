@@ -97,10 +97,10 @@ args = parser.parse_args()
 #context.set_context(mode=context.PYNATIVE_MODE, device_target="Ascend")
 #context.set_context(mode=context.GRAPH_MODE, device_target="Ascend")
 
-device_id = int(os.getenv('DEVICE_ID'))
+#device_id = int(os.getenv('DEVICE_ID'))
 context.set_context(mode=context.PYNATIVE_MODE, device_target="Ascend")
-context.set_context(device_id=device_id) # set device_id
-init()
+#context.set_context(device_id=device_id) # set device_id
+#init()
 
 random_seed = 1996
 np.random.seed(random_seed)
@@ -125,7 +125,7 @@ def EnvToObs(train_dir, obs_train_url):
 
 
 def main():
-    rank =get_rank()
+    rank =0#get_rank()
     print(os.listdir(workroot))
     #初始化数据和模型存放目录
     data_dir = workroot + '/data'  #先在训练镜像中定义数据集路径
@@ -137,7 +137,7 @@ def main():
  ######################## 将数据集从obs拷贝到训练镜像中 （固定写法）########################   
     # 在训练环境中定义data_url和train_url，并把数据从obs拷贝到相应的固定路径，以下写法是将数据拷贝到/home/work/user-job-dir/data/目录下，可修改为其他目录
     ObsToEnv(args.data_url,data_dir)
-    context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL, gradients_mean=True)
+    #context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL, gradients_mean=True)
 
     net = ConvLSTM(input_dim=1,
                  hidden_dim=[64, 64,64,64],
