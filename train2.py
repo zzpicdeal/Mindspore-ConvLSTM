@@ -159,7 +159,7 @@ def main():
                 net.trainable_params(),
                 learning_rate = 0.0001) 
 
-    model = Model(network=net, loss_fn=criterion, optimizer=optimizer, metrics={'SSIM': nn.SSIM(), "MSE":nn.MSE(),"MAE":nn.MAE()})
+    model = Model(network=net, loss_fn=criterion, optimizer=optimizer, metrics={ "MSE":nn.MSE(),"MAE":nn.MAE()})
     ckpt_save_dir = workroot + '/model/ckpt_' + str(rank)
     loss_cb = LossMonitor(100)
     time_cb = TimeMonitor(data_size=data.train_dataset.get_dataset_size())
