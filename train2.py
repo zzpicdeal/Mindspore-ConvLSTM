@@ -152,15 +152,14 @@ def main():
     #net_with_loss = NetWithLoss(net, criterion)
     data = get_dataset(data_dir,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
-    min_lr = 0.000001
     max_lr = 0.0001
     decay_steps = 1000
-    cosine_decay_lr = nn.CosineDecayLR(min_lr, max_lr, decay_steps)
+    #cosine_decay_lr = nn.CosineDecayLR(min_lr, max_lr, decay_steps)
     optimizer = nn.Adam(
                 net.trainable_params(),
-                learning_rate = cosine_decay_lr) 
+                learning_rate = 0.0001) 
 
-    model = Model(network=net, loss_fn=criterion, optimizer=optimizer, metrics={'SSIM': nn.MAE(), "MSE":nn.MSE(),"MAE":nn.MAE()})
+    model = Model(network=net, loss_fn=criterion, optimizer=optimizer, metrics={'SSIM': nn.SSIM(), "MSE":nn.MSE(),"MAE":nn.MAE()})
     ckpt_save_dir = workroot + '/model/ckpt_' + str(rank)
     loss_cb = LossMonitor(100)
     time_cb = TimeMonitor(data_size=data.train_dataset.get_dataset_size())
