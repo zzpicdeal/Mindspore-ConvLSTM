@@ -93,7 +93,7 @@ class ConvLSTM(nn.Cell):
             # (t, b, c, h, w) -> (b, t, c, h, w)
             input_tensor = self.trans(input_tensor,(1, 0, 2, 3, 4))
 
-        b, _, _, h, w = input_tensor.shape
+        b, _, _, H, W = input_tensor.shape
 
         # Implement stateful ConvLSTM
         #if hidden_state is not None:
@@ -101,7 +101,7 @@ class ConvLSTM(nn.Cell):
         #else:
             # Since the init is done in forward. Can send image size here
         hidden_state = self._init_hidden(batch_size=b,
-                                             image_size=(h, w))
+                                             image_size=(H, W))
 
         layer_output_list = []
         last_state_list = []
@@ -127,6 +127,8 @@ class ConvLSTM(nn.Cell):
             h, c = output_inner[-layer_idx-1],output_inner2[-layer_idx-1]
             output_inner3 = []
             output_inner4 = []
+            if layer_idx == 0 :
+                cur_layer_input = self.zeros((b,10,self.hidden_dim[2],H,W), mindspore.float32)
             for t in range(seq_len):
                 h, c = self.cell_list[layer_idx+2](input_tensor=cur_layer_input[:, t, :, :, :],
                                                  cur_state=[h, c])
