@@ -76,7 +76,7 @@ class ConvLSTM(nn.Cell):
 
         self.trans = ops.Transpose()   
         self.stack = ops.Stack(axis=1)
-
+        self.zeros = ops.Zeros()
     def construct(self, input_tensor, hidden_state=None):
         """
         Parameters
