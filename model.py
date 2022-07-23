@@ -60,7 +60,12 @@ class ConvLSTM(nn.Cell):
         self.return_all_layers = return_all_layers  
         self.enco = enco
         self.deco_dim = deco_dims
-        self.last = nn.Conv2d(64,1,(1,1))
+
+        self.relu = nn.ReLU()
+        self.last1 = nn.Conv2d(64,16,(3,3),pad_mode='same')
+        self.last2 = nn.Conv2d(16,8,(3,3),pad_mode='same')
+        self.last3 = nn.Conv2d(8,1,(1,1),pad_mode='same')
+
         cell_list = []
         for i in range(0, self.num_layers):
             cur_input_dim = self.input_dim if i == 0 else self.hidden_dim[i - 1]
@@ -148,7 +153,10 @@ class ConvLSTM(nn.Cell):
         #print(out.shape)
         B,S,N,H,W = out.shape
         out = out.reshape(B*S,N,H,W)
-        out = self.last(out)
+        out = self.relu(self.last1(out))
+        out = self.relu(self.last2(out))
+        out = self.last3(out)
+
         out = out.reshape(B,S,1,H,W)
         return out
 
