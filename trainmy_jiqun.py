@@ -742,7 +742,7 @@ def EnvToObs(train_dir, obs_train_url):
 
 
 def main():
-    rank =get_rank()
+    rank =1
 
     print(os.listdir(workroot))
     #初始化数据和模型存放目录
