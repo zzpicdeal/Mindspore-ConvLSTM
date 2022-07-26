@@ -68,7 +68,8 @@ set_seed(1996)
 environment = 'train'  
 
 
-workroot = '/cache/dataset'    
+workroot = '/cache/dataset'  
+os.system('cd /cache/code/convlstm') 
 print('current work mode:' + environment + ', workroot:' + workroot)
 parser = argparse.ArgumentParser("convlstm")
 parser.add_argument('--batch_size', type=int, default=32, help='batch size')
