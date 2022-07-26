@@ -50,6 +50,7 @@ from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMoni
 from mindspore import Tensor, Model
 
 print(os.listdir( '/cache/code' ))
+os.system('cd /cache/code/convlstm') 
 from mindspore.common import set_seed
 from mindspore import context, DatasetHelper, connect_network_with_dataset
 from mindspore import dtype as mstype
@@ -69,7 +70,7 @@ environment = 'train'
 
 
 workroot = '/cache/dataset'  
-os.system('cd /cache/code/convlstm') 
+
 print('current work mode:' + environment + ', workroot:' + workroot)
 parser = argparse.ArgumentParser("convlstm")
 parser.add_argument('--batch_size', type=int, default=32, help='batch size')
