@@ -643,8 +643,9 @@ class lr_(Callback):
             self.num = self.num + 1
             if self.num >= self.times :
                 new_lr = arr_lr*self.fc
-                F.assign(cb_params.optimizer.learning_rate, Tensor(new_lr, mstype.float32))
-                print('change lr is:',new_lr)
+                if new_lr >= 1e-8:
+                    F.assign(cb_params.optimizer.learning_rate, Tensor(new_lr, mstype.float32))
+                    print('change lr is:',new_lr)
                 self.num = 0
                 
         else:
