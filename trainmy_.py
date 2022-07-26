@@ -63,9 +63,9 @@ from mindspore.communication.management import init, get_rank, get_group_size
 import moxing as mox
 from datasettest import get_dataset, _get_rank_info
 from modelresnet import G_convlstm,G_ConvLSTMCell
-from callback import EvaluateCallBack
+#from callback import EvaluateCallBack
 set_seed(1996)
-environment = 'debug'  
+environment = 'train'  
 if environment == 'debug':
     workroot = '/home/ma-user/work' #调试任务使用该参数
 else:
@@ -125,8 +125,8 @@ def EnvToObs(train_dir, obs_train_url):
 
 
 def main():
-    #rank =get_rank()
-    rank = 1
+    rank =get_rank()
+
     print(os.listdir(workroot))
     #初始化数据和模型存放目录
     data_dir = workroot + '/data'  #先在训练镜像中定义数据集路径
@@ -137,7 +137,7 @@ def main():
             os.makedirs(train_dir)
  ######################## 将数据集从obs拷贝到训练镜像中 （固定写法）########################   
     # 在训练环境中定义data_url和train_url，并把数据从obs拷贝到相应的固定路径，以下写法是将数据拷贝到/home/work/user-job-dir/data/目录下，可修改为其他目录
-    #ObsToEnv(args.data_url,data_dir)
+    ObsToEnv(args.data_url,data_dir)
     #context.set_auto_parallel_context(parallel_mode=ParallelMode.DATA_PARALLEL, gradients_mean=True)
 
 
@@ -162,9 +162,7 @@ def main():
     #time_cb = TimeMonitor(data_size=data.train_dataset.get_dataset_size())
     config_ck = CheckpointConfig(save_checkpoint_steps=500, keep_checkpoint_max=16)
     ckpoint_cb = ModelCheckpoint(prefix="lstm", directory=ckpt_save_dir, config=config_ck)
-    eval_cb = EvaluateCallBack(model, eval_dataset=data.val_dataset, src_url=ckpt_save_dir,
-                               train_url=os.path.join(args.train_url, "ckpt_" + str(rank)),
-                               save_freq=args.save_every)
+
     lr_cb = lr_(0.5,4)
     print(_get_device_num())
     print("begin train")
@@ -173,6 +171,6 @@ def main():
                 dataset_sink_mode=False)
     print("train success")
 
-    #EnvToObs(train_dir, args.train_url)
+    EnvToObs(train_dir, args.train_url)
 if __name__ == '__main__':
     main()
