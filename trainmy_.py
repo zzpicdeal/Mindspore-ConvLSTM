@@ -74,7 +74,7 @@ print('current work mode:' + environment + ', workroot:' + workroot)
 parser = argparse.ArgumentParser("convlstm")
 parser.add_argument('--batch_size', type=int, default=32, help='batch size')
 
-parser.add_argument('--epochs', type=int, default=500, help='num of training epochs')
+parser.add_argument('--epochs', type=int, default=100, help='num of training epochs')
 #parser.add_argument('--seed', type=int, default=1, help='random seed')
 parser.add_argument('--data_url',
                     help='path to training/inference dataset folder',
