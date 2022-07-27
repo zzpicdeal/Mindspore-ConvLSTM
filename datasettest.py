@@ -120,7 +120,7 @@ class MovingMNIST():
             # Generate data on the fly
             images = self.generate_moving_mnist(num_digits)
         else:
-            images = self.dataset[:, idx, ...]
+            images = self.dataset[:, idx, ...].astype(np.float32)
 
         # if self.transform is not None:
         #     images = self.transform(images)
@@ -195,6 +195,6 @@ def create_train_dataset(dataset,batch=32):
 class get_dataset():
     def __init__(self,root,batch=32) -> None:
         self.train_dataset = create_train_dataset(MovingMNIST(root,True,10,10,[3],True),batch)
-        self.val_dataset = create_train_dataset(MovingMNIST(root,False,10,10,[3],True),batch)
+        self.val_dataset = create_train_dataset(MovingMNIST(root,False,10,10,[2],True),batch)
 
 
