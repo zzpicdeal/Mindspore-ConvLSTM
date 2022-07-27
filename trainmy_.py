@@ -83,10 +83,10 @@ parser.add_argument('--data_url',
 parser.add_argument('--train_url',
                     help='model folder to save/load',
                     default= workroot + '/model/')#save_path
-#parser.add_argument('--test_url', required=True, default=None, help='Location of data.')
+
 parser.add_argument('--num_parallel_workers', type=int, default=1, help='num_parallel_work')
 parser.add_argument("--save_every", default=2, type=int, help="Save every ___ epochs(default:2)")
-#parser.add_argument('--continue', type=bool, default=False, help='continue train')
+
 parser.add_argument(
     '--device_target',
     type=str,
@@ -125,8 +125,8 @@ def EnvToObs(train_dir, obs_train_url):
 
 
 def main():
-    rank =get_rank()
-
+    #rank =get_rank()
+    rank =1
     print(os.listdir(workroot))
     #初始化数据和模型存放目录
     data_dir = workroot + '/data'  #先在训练镜像中定义数据集路径
@@ -146,10 +146,7 @@ def main():
     #net_with_loss = NetWithLoss(net, criterion)
     data = get_dataset(data_dir,args.batch_size)#
     batch_num = data.train_dataset.get_dataset_size()
-    max_lr = 0.0001
-    min_lr = 0.000001
-    decay_steps = 1000
-    cosine_decay_lr = nn.CosineDecayLR(min_lr, max_lr, decay_steps)
+
     optimizer = nn.Adam(
                 net.trainable_params(),
                 learning_rate = 0.0001) 
