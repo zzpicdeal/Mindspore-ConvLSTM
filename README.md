@@ -143,7 +143,7 @@ bash run_infer_310.sh [MINDIR_PATH] [DATASET] [DATA_PATH] [LABEL_FILE] [DEVICE_I
 | Optimizer                  | Adam                                                         |
 | Loss Function              | MSE                                                          |
 | outputs                    | probability                                                  |
-| Loss                       | 0.0002519517                                                 |
+| Loss                       | 0.0001319517                                                 |
 | Total time                 | 13 hours                                                      |
 | Parameters (M)             | 11.2                                                         | 
 | Checkpoint for Fine tuning | 103M (.ckpt file)                                             | 
@@ -332,7 +332,7 @@ bash run_infer_310.sh [MINDIR_PATH] [DATASET] [DATA_PATH] [LABEL_FILE] [DEVICE_I
 | Optimizer                  | Momentum                                                     | Momentum                                      |
 | Loss Function              | Softmax Cross Entropy                                        | Softmax Cross Entropy                         |
 | outputs                    | probability                                                  | probability                                   |
-| Loss                       | 0.0002519517                                                 |  0.0015517382                                 |
+| Loss                       | 0.00135                                               |  0.0015517382                                 |
 | Speed                      | 13 ms/step（8pcs）                                           | 29 ms/step（8pcs）                            |
 | Total time                 | 4 mins                                                       | 11 minds                                      |
 | Parameters (M)             | 11.2                                                         | 11.2                                          |
