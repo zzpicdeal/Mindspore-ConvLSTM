@@ -16,6 +16,7 @@
 
 from mindspore.train.callback import Callback
 
+from mindspore.ops import functional as F
 
 
 
@@ -48,3 +49,38 @@ class EvaluateCallBack(Callback):
             if cur_epoch_num % self.save_freq == 0:
                 mox.file.copy_parallel(src_url=self.src_url, dst_url=self.train_url)
         '''   
+
+class lr_(Callback):
+    """StopAtTime"""
+    def __init__(self, fc = 0.5,times = 4):
+        """init"""
+        super(lr_, self).__init__()
+        self.fc =  fc
+        self.times = times
+        self.num = 0
+        self.best = 1
+    def begin(self, run_context):
+        """begin"""
+
+
+    def epoch_end(self, run_context):
+        """epoch end"""
+        cb_params = run_context.original_args()
+        loss = cb_params.net_outputs
+        
+        optimizer = cb_params.optimizer
+
+        arr_lr = cb_params.optimizer.learning_rate.asnumpy()
+        if loss[0].asnumpy() >= self.best:
+            self.num = self.num + 1
+            if self.num >= self.times :
+                new_lr = arr_lr*self.fc
+                F.assign(cb_params.optimizer.learning_rate, Tensor(new_lr, mstype.float32))
+                print('change lr is:',new_lr)
+                self.num = 0
+                
+        else:
+            self.best = loss[0].asnumpy()
+            
+            self.num = 0   
+        print('loss is :',loss[0].asnumpy(),'lr is :',arr_lr) 
