@@ -176,9 +176,9 @@ python export.py
 | Scripts                    | [link](https://gitee.com/mindspore/models/tree/master/official/cv/)                     
 ### 推理性能
 
-> 提供推理性能的详细描述，包括耗时，精度等
 
-你可以参照如下模板
+
+
 
 | Parameters          | Ascend                      |
 | ------------------- | --------------------------- |
