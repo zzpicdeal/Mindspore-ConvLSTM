@@ -1,17 +1,13 @@
 import mindspore
 import mindspore.nn as nn
 import mindspore.ops as ops 
+
 from mindspore import dtype as mstype
-from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMonitor
 from mindspore import Parameter
-import mindspore
-import mindspore.nn as nn
-import mindspore.ops as ops 
-from mindspore import Parameter
-from mindspore import dtype as mstype
 from mindspore import Tensor
+
 from mindspore.common.initializer import One, Normal,Zero
-from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMonitor
+
 class ConvLSTMCell(nn.Cell):
     def __init__(self,shape,input_dim,hidden_dim,kernel_size):
         super(ConvLSTMCell,self).__init__()
