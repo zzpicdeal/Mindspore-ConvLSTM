@@ -16,47 +16,42 @@
 
 echo "=============================================================================================================="
 echo "Please run the script as: "
-echo "bash scripts/run_single_train.sh DEVICE_ID MINDRECORD_DIR PRE_TRAINED PRE_TRAINED_EPOCH_SIZE"
-echo "for example: bash scripts/run_single_train.sh 0 /cache/mindrecord_dir/ /opt/retinanet_nasfpn-300_916.ckpt(optional) 200(optional)"
+echo "bash scripts/run_single_train.sh DEVICE_ID BACTHSIZE EPOCHS_NUMS DATAPATH SAVEPATH"
+echo "for example: bash scripts/run_single_train.sh 0 32 100 ./data ./model"
 echo "It is better to use absolute path."
 echo "================================================================================================================="
 
-if [ $# != 2 ] && [ $# != 4 ]
+if [ $# != 5 ]
 then
-    echo "Usage: bash scripts/run_single_train.sh [DEVICE_ID] [MINDRECORD_DIR] \
-[PRE_TRAINED](optional) [PRE_TRAINED_EPOCH_SIZE](optional)"
+    echo "Usage: bash scripts/run_single_train.sh [DEVICE_ID] [BACTHSIZE] \
+[EPOCHS_NUMS] [DATAPATH] [SAVEPATH]"
     exit 1
 fi
 
 echo "After running the script, the network runs in the background. The log will be generated in LOGx/log.txt"
 
 export DEVICE_ID=$1
-MINDRECORD_DIR=$2
-PRE_TRAINED=$3
-PRE_TRAINED_EPOCH_SIZE=$4
+BACTHSIZE=$2
+EPOCHS_NUMS=$3
+DATAPATH=$4
+SAVEPATH=$5
 
 rm -rf LOG$1
 mkdir ./LOG$1
 cp ./*.py ./LOG$1
 cp -r ./src ./LOG$1
-cp ./*yaml ./LOG$1
 cd ./LOG$1 || exit
-echo "start training for device $1"
-env > env.log
-if [ $# == 2 ]
-then
-    python train.py  \
-    --distribute=False  \
-    --mindrecord_dir=$MINDRECORD_DIR  > log.txt 2>&1 &
-fi
 
-if [ $# == 4 ]
-then
-    python train,py  \
-    --distribute=False  \
-    --mindrecord_dir=$MINDRECORD_DIR \
-    --pre_trained=$PRE_TRAINED \
-    --pre_trained_epoch_size=$PRE_TRAINED_EPOCH_SIZE > log.txt 2>&1 &
-fi
+echo "start training for device $1"
+
+env > env.log
+
+
+python train,py  \
+--distribute=False  \
+--mindrecord_dir=$MINDRECORD_DIR \
+--pre_trained=$PRE_TRAINED \
+--pre_trained_epoch_size=$PRE_TRAINED_EPOCH_SIZE > log.txt 2>&1 &
+
 
 cd ../
