@@ -13,7 +13,6 @@ from mindspore import context
 from mindspore import nn,DynamicLossScaleManager
 
 from mindspore.common import set_seed
-from mindspore.common import set_seed
 
 from mindspore.train.callback import ModelCheckpoint, CheckpointConfig, LossMonitor
 
