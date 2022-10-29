@@ -84,7 +84,7 @@ python train_.py --batch_size 32 --save_every 5
 
 ### 分布式训练
 
-> 同上
+> 暂无
 
 ## 评估
 
