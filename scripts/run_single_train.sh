@@ -47,11 +47,11 @@ echo "start training for device $1"
 env > env.log
 
 
-python train,py  \
---distribute=False  \
---mindrecord_dir=$MINDRECORD_DIR \
---pre_trained=$PRE_TRAINED \
---pre_trained_epoch_size=$PRE_TRAINED_EPOCH_SIZE > log.txt 2>&1 &
+python train_.py  \
+--batch_size=$BACTHSIZE  \
+--epochs=$EPOCHS_NUMS \
+--data_path=$DATAPATH \
+--train_path=$SAVEPATH > log.txt 2>&1 &
 
 
 cd ../
