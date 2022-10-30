@@ -3,7 +3,7 @@
 
 - [目录](#目录)
     - [Convlstm描述](#Convlstm)
-    - [模型架构](#construction)
+    - [模型架构](#模型架构)
     - [数据集MovingMNIST](#MovingMNIST)
     - [环境要求](#ENV)
     - [快速开始](#Start)
@@ -44,7 +44,7 @@ Convlstm模型和传统LSTM的不同：
 
 ②模型的input是3D tensor。
 
-## [模型架构]
+## [模型架构](#目录)
 ![encoder](img/5.png) 
 > 
 预测模型包括两个网络，一个编码网络和一个预测网络。，预测网络的初始状态和单元输出从编码网络的最后状态复制。这两个网络都是通过叠加几个ConvLSTM层而形成的。由于预测目标与输入具有相同的维数，将预测网络中的所有状态连接起来，并将它们输入1×1卷积层，生成最终的预测。
@@ -106,7 +106,8 @@ for example: bash scripts/run_single_train.sh 0 32 100 ./data ./model
 
 ### [脚本参数](#param)
 
-> 暂无
+> batch_size 32
+> epochs 100
 
 
 
