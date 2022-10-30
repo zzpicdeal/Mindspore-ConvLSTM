@@ -101,6 +101,9 @@ for example: bash scripts/run_single_train.sh 0 32 100 ./data ./model
             ├─convlstm.py                 # 模型结构
         └─ tools
             ├─callback.py                 # 回调函数
+    └─ scripts
+        ├─run_eval.sh
+        ├─run_single_train.sh 
 ```
 
 ### [脚本参数](#param)
