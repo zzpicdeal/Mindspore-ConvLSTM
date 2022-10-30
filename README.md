@@ -73,8 +73,7 @@ Convlstm模型和传统LSTM的不同：
 ```shell
 cd work/convlstm
 python train_.py --batch_size 32 --save_every 5
-
-#Or bash 
+ 
 bash scripts/run_single_train.sh [DEVICE_ID] [BACTHSIZE] [EPOCHS_NUMS] [DATAPATH SAVEPATH]
 for example: bash scripts/run_single_train.sh 0 32 100 ./data ./model
 ```
