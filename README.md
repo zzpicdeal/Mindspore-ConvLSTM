@@ -126,7 +126,9 @@ python test.py
 --workroot '/home/ma-user/work/data' #data path
 --pretrained_model 'path/xx.ckpt' 
 --batch_szie 32#input batch_szie
-                    
+#Or bash
+bash scripts/run_eval.sh [DEVICE_ID] [DATAPATH] [CKPTPATH] [BACTHSIZE]   
+for example: bash cripts/run_eval.sh 0 '/home/ma-user/work/data' 'path/xx.ckpt' 32       
 ```
 
 ### [评估结果](#evalresult)
