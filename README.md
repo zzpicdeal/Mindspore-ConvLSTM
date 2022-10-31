@@ -88,7 +88,6 @@ for example: bash scripts/run_single_train.sh 0 32 100 ./data ./model
 > 提供完整的代码目录展示（包含子文件夹的展开），描述每个文件的作用
  ```bash
 └─convlstm
-    ├─test.ipynb                 # 验证notebook
     ├──test.py                   # 验证脚本
     ├──export.py					#导出脚本 
     ├──train.py					#启智平台训练脚本 
